@@ -5,6 +5,7 @@ D library for parsing .mo files and getting translated messages. Support for plu
 ## Usage
 
 ```d
+import mofile;
 // Parse .mo file
 MoFile moFile("ru.mo");
 // Find translation
@@ -54,7 +55,7 @@ Step by step process of generation .mo file from source file (gettext utilities 
 
 If source file has been changed run these commands to update translation files:
 
-    xgettext -j --from-code=UTF-8 --language=C examples/main.d -o examples/messages.pot # Update template file.
+    xgettext -j --from-code=UTF-8 --language=C $SOURCE -o $TEMPLATE # Update template file.
     msgmerge --update $POFILE $TEMPLATE
     # ... fix translations if needed
     msgfmt $POFILE -o $MOFILE
