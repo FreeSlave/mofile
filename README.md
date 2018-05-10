@@ -2,6 +2,8 @@
 
 D library for parsing .mo files and getting translated messages. Support for plural forms is present. Usage is similar to [GNU gettext](https://www.gnu.org/software/gettext/).
 
+[Online documentation](https://freeslave.github.io/mofile/mofile.html)
+
 ## Usage
 
 ```d
@@ -23,7 +25,8 @@ Commandline analogue of gettext and ngettext functions.
 To run this example you must have some .mo file.
 For a quick start there's already [template](examples/messages.pot) and [Russian translation](examples/ru.po) example files, so you only need to generate .mo file:
 
-    msgfmt examples/ru.po -o examples/ru.mo
+    msgfmt --no-hash examples/ru.po -o examples/ru.mo
+    # The library currently does not support lookup by hash, so we omit hash generation.
 
 And then run:
 
@@ -49,9 +52,9 @@ Step by step process of generation .mo file from source file (gettext utilities 
     MOFILE=examples/ru.mo
     MSGLOCALE=ru_RU.UTF-8 # Target locale
     xgettext --from-code=UTF-8 --language=C $SOURCE -o examples/messages.pot # Create template file.
-    msginit --locale=$MSGLOCALE -i $TEMPLATE -o $POFILE --no-translator # Generate translation file
+    msginit --locale=$MSGLOCALE -i $TEMPLATE -o $POFILE --no-translator # Generate text translation file
     # ... translate messages in editor
-    msgfmt $POFILE -o $MOFILE
+    msgfmt $POFILE -o $MOFILE # Generate binary translation file
 
 If source file has been changed run these commands to update translation files:
 

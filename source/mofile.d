@@ -503,6 +503,10 @@ import std.typecons : tuple;
 {
     /**
      * Read from file.
+     *
+     * $(D mofile.MoFileException) if data is in invalid or unsupported format.
+     * $(D mofile.PluralFormException) if plural form expression could not be parsed.
+     * $(B FileException) on file reading error.
      */
     @trusted this(string fileName) {
         import std.file : read;
