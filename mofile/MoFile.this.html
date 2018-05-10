@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<title>MoFile.this - multiple declarations</title>
+		<link rel="stylesheet" type="text/css" href="../styles/ddox.css"/>
+		<link rel="stylesheet" href="../prettify/prettify.css" type="text/css"/>
+		<script type="text/javascript" src="../scripts/jquery.js">/**/</script><script type="text/javascript" src="../scripts/ddox.js">/**/</script>
+	</head>
+	<body onload="setupDdox();">
+		<nav id="main-nav">
+			<noscript>
+				<p style="color: red">The search functionality needs JavaScript enabled</p>
+			</noscript>
+			<div id="symbolSearchPane" style="display: none">
+				<form action="#" method="GET">
+					<input id="symbolSearch" type="text" name="q" placeholder="Search for symbols" autocomplete="off" onchange="performSymbolSearch(40);" onkeypress="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();"/>
+				</form>
+				<ul id="symbolSearchResults" class="symbolList" style="display: none"></ul><script type="application/javascript" src="../symbols.js"></script><script type="application/javascript">var symbolSearchRootDir = "../";
+$('#symbolSearchPane').show();</script>
+			</div>
+			<ul class="tree-view">
+				<li>
+					<div class="module selected">
+						<a href="../mofile.html">mofile</a>
+					</div>
+				</li>
+			</ul>
+		</nav>
+		<div id="main-contents">
+			<h1>MoFile.this - multiple declarations</h1>
+			<nav class="page-nav">
+				<ul>
+					<li>
+						<a href="#0">
+							Function <code>MoFile.this</code>
+						</a>
+					</li>
+					<li>
+						<a href="#1">
+							Function <code>MoFile.this</code>
+						</a>
+					</li>
+				</ul>
+			</nav><h2 id="0">Function MoFile.this</h2><p>Read from file.
+</p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">ref </span><span class="pln">this</span>
+			<span class="pun">(</span>
+			<br/>
+			&nbsp;&nbsp;<span class="typ">string</span> <span class="pln">fileName</span>
+			<br/>
+			<span class="pun">)</span><span class="pln"> </span><span class="kwd">@trusted</span><span class="pun">;</span>
+					</div>
+				</code>
+			</div>
+			<section><p><code class="lang-d"><a href="../mofile/MoFileException.html" title="mofile.MoFileException"><span class="typ">MoFileException</span></a></code> if data is in invalid or unsupported format.
+ <code class="lang-d"><a href="../mofile/PluralFormException.html" title="mofile.PluralFormException"><span class="typ">PluralFormException</span></a></code> if plural form expression could not be parsed.
+ <b>FileException</b> on file reading error.
+</p>
+</section>
+
+			<h2 id="1">Function MoFile.this</h2><p>Constructor from data.
+ Data must be immutable and live as long as translated messages are used, because it's used to return strings.
+</p>
+			<div class="prototype">
+				<code class="lang-d">
+					<div class="single-prototype">
+			<span class="kwd">ref </span><span class="pln">this</span>
+			<span class="pun">(</span>
+			<br/>
+			&nbsp;&nbsp;<span class="kwd">immutable</span><span class="pun">(</span><span class="typ">void</span><span class="pun">)</span><span class="pun">[]</span> <span class="pln">data</span>
+			<br/>
+			<span class="pun">)</span><span class="pln"> </span><span class="kwd">pure @safe</span><span class="pun">;</span>
+					</div>
+				</code>
+			</div>
+			
+			<section><h3>Throws</h3>
+<p><code class="lang-d"><a href="../mofile/MoFileException.html" title="mofile.MoFileException"><span class="typ">MoFileException</span></a></code> if data is in invalid or unsupported format.
+ <code class="lang-d"><a href="../mofile/PluralFormException.html" title="mofile.PluralFormException"><span class="typ">PluralFormException</span></a></code> if plural form expression could not be parsed.
+</p>
+</section>
+
+			<footer>
+				<table class="license-info">
+					<tr>
+						<th>Authors</th>
+						<td>
+							<p><a href="https://github.com/FreeSlave">Roman Chistokhodov</a>
+</p>
+
+						</td>
+					</tr>
+					<tr>
+						<th>Copyright</th>
+						<td>
+							<p>Roman Chistokhodov, 2018
+</p>
+
+						</td>
+					</tr>
+					<tr>
+						<th>License</th>
+						<td>
+							<p><a href="http://www.boost.org/LICENSE_1_0.txt">Boost License 1.0</a>.
+</p>
+
+						</td>
+					</tr>
+				</table>
+				<p class="faint">Generated using the DDOX documentation generator</p>
+			</footer>
+		</div>
+	</body>
+</html>

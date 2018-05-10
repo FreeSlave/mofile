@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>http://127.0.0.1/index.html</loc></url>
+<url><loc>http://127.0.0.1/mofile.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.gettext.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.header.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.ngettext.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.this.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFile.this.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/MoFileException.html</loc></url>
+<url><loc>http://127.0.0.1/mofile/PluralFormException.html</loc></url>
+</urlset>
