@@ -1,0 +1,60 @@
+# Mofile
+
+D library for parsing .mo files and getting translated messages. Support for plural forms is present. Usage is similar to [GNU gettext](https://www.gnu.org/software/gettext/).
+
+## Usage
+
+```d
+// Parse .mo file
+MoFile moFile("ru.mo");
+// Find translation
+string s = moFile.gettext("Hello, world");
+// Trying out plural forms
+s = moFile.ngettext("File", "Files", 1);
+s = moFile.ngettext("File", "Files", 3);
+s = moFile.ngettext("File", "Files", 5);
+```
+
+## [Example](examples/gettext.d)
+
+Commandline analogue of gettext and ngettext functions.
+
+To run this example you must have some .mo file.
+For a quick start there's already [template](examples/messages.pot) and [Russian translation](examples/ru.po) example files, so you only need to generate .mo file:
+
+    msgfmt examples/ru.po -o examples/ru.mo
+
+And then run:
+
+    dub examples/gettext.d examples/ru.mo "Hello, world"
+    dub examples/gettext.d examples/ru.mo "File" "Files" 1
+    dub examples/gettext.d examples/ru.mo "File" "Files" 3
+    dub examples/gettext.d examples/ru.mo "File" "Files" 5
+    dub examples/gettext.d examples/ru.mo "" # Get header
+
+Generic use:
+
+    dub examples/gettext.d $MOFILE msgid # msgid is a string to translate
+    dub examples/gettext.d $MOFILE msgid msgid_plural n # msgid_plural is an untranslated plural form of message, n is a number to calculate a plural form from.
+
+## How to generate .mo file from source file
+
+Mostly the same way as in C/C++ projects.
+Step by step process of generation .mo file from source file (gettext utilities must be installed):
+
+    SOURCE=examples/main.d
+    TEMPLATE=examples/messages.pot
+    POFILE=examples/ru.po
+    MOFILE=examples/ru.mo
+    MSGLOCALE=ru_RU.UTF-8 # Target locale
+    xgettext --from-code=UTF-8 --language=C $SOURCE -o examples/messages.pot # Create template file.
+    msginit --locale=$MSGLOCALE -i $TEMPLATE -o $POFILE --no-translator # Generate translation file
+    # ... translate messages in editor
+    msgfmt $POFILE -o $MOFILE
+
+If source file has been changed run these commands to update translation files:
+
+    xgettext -j --from-code=UTF-8 --language=C examples/main.d -o examples/messages.pot # Update template file.
+    msgmerge --update $POFILE $TEMPLATE
+    # ... fix translations if needed
+    msgfmt $POFILE -o $MOFILE

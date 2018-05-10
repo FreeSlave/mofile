@@ -1,0 +1,11 @@
+{
+    "name": "mofile",
+    "authors": [
+        "Roman Chistokhodov"
+    ],
+    "description": "Parse .mo files and find translated messages.",
+    "copyright": "Copyright © 2018, Roman Chistokhodov",
+    "license": "BSL-1.0",
+    "targetPath" : "lib",
+    "targetType" : "library"
+}
