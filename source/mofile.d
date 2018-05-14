@@ -478,21 +478,23 @@ private @safe
         assert(expr(210) == 2);
 
         import std.exception : assertThrown;
-        assertThrown(new Parser("").compile());
-        assertThrown(new Parser("n?1").compile());
-        assertThrown(new Parser("(2-1").compile());
-        assertThrown(new Parser("p").compile());
-        assertThrown(new Parser("1+2;").compile());
+        assertThrown!PluralFormException(new Parser("").compile());
+        assertThrown!PluralFormException(new Parser("n?1").compile());
+        assertThrown!PluralFormException(new Parser("(2-1").compile());
+        assertThrown!PluralFormException(new Parser("p").compile());
+        assertThrown!PluralFormException(new Parser("1+2;").compile());
     }
 }
 
 import std.exception : assumeUnique, enforce;
-import std.range : iota, assumeSorted, drop;
+import std.range : iota, assumeSorted, drop, dropOne;
 import std.algorithm.iteration : map, splitter;
 import std.algorithm.searching : all, find, findSkip, skipOver;
 import std.algorithm.sorting : isSorted;
 import std.string : lineSplitter, stripRight;
 import std.typecons : tuple;
+
+private enum int moMagic = 0x950412de;
 
 /**
  * Struct representing .mo file.
@@ -523,7 +525,7 @@ import std.typecons : tuple;
     @safe this(immutable(void)[] data) pure {
         this.data = data;
         const magic = readValue!int(0);
-        if (magic != 0x950412de) {
+        if (magic != moMagic) {
             throw new MoFileException("Wrong magic");
         }
         const revision = readValue!int(int.sizeof);
@@ -539,9 +541,11 @@ import std.typecons : tuple;
             throw new MoFileException("Invalid count of msgids, must be at least 1");
         }
 
-        auto mapped = iota(1,count).map!(i => getMessage(baseOffsetOrig, i));
+        auto mapped = iota(0,count).map!(i => getMessage(baseOffsetOrig, i));
         enforce!MoFileException(mapped.isSorted, "Invalid .mo file: message ids are not sorted");
-        enforce!MoFileException(mapped.all!"!a.empty", "Some msgid besides the reserved one is empty");
+        if (!mapped.empty && mapped.front.length == 0) {
+            enforce!MoFileException(mapped.dropOne.all!"!a.empty", "Some msgid besides the reserved one is empty");
+        }
 
         string header = getMessage(baseOffsetTr, 0);
         foreach(line; header.lineSplitter) {
@@ -559,9 +563,7 @@ import std.typecons : tuple;
      * .mo file header that includes some info like creation date, language and translator's name.
      */
     string header() pure const {
-        if (count)
-            return getMessage(baseOffsetTr, 0);
-        return string.init;
+        return gettext("");
     }
 
     /**
@@ -610,9 +612,7 @@ private:
     @trusted int getIndex(string message) pure const {
         if (data.length == 0)
             return -1;
-        if (message.length == 0)
-            return 0;
-        auto sorted = iota(1, count).map!(i => tuple(i, getMessage(baseOffsetOrig, i).splitter('\0').front)).assumeSorted!"a[1] < b[1]";
+        auto sorted = iota(0, count).map!(i => tuple(i, getMessageSingular(baseOffsetOrig, i))).assumeSorted!"a[1] < b[1]";
         auto found = sorted.equalRange(tuple(0, message));
         if (found.empty) {
             return -1;
@@ -645,10 +645,19 @@ private:
         return readString(readValue!int(offset + i*int.sizeof*2), readValue!int(offset + i*int.sizeof*2 + int.sizeof));
     }
 
+    @trusted string getMessageSingular(int offset, int i) pure const {
+        auto splitted = getMessage(offset, i).splitter('\0');
+        if (splitted.empty) {
+            return "";
+        } else {
+            return splitted.front;
+        }
+    }
+
     int count;
     int baseOffsetOrig;
     int baseOffsetTr;
-    immutable(void[]) data;
+    immutable(void)[] data;
     Plural compiled;
 }
 
@@ -656,8 +665,23 @@ unittest
 {
     MoFile moFile;
     assert(moFile.header.length == 0);
+    assert(moFile.gettext("") == "");
     assert(moFile.gettext("Hello") == "Hello");
     assert(moFile.ngettext("File", "Files", 1) == "File");
     assert(moFile.ngettext("File", "Files", 2) == "Files");
     assert(moFile.ngettext("File", "Files", 0) == "Files");
+}
+
+unittest
+{
+    import std.bitmanip : nativeToLittleEndian;
+    import std.string : representation;
+    immutable(ubyte)[] moHeader = (nativeToLittleEndian(moMagic)[] ~ nativeToLittleEndian(0)[] ~ nativeToLittleEndian(1)[] ~ nativeToLittleEndian(20) ~ nativeToLittleEndian(28)).assumeUnique;
+    immutable(ubyte)[] offsets = (nativeToLittleEndian(4)[] ~ nativeToLittleEndian(36)[] ~ nativeToLittleEndian(4)[] ~ nativeToLittleEndian(40)[]).assumeUnique;
+    immutable(ubyte)[] data = moHeader ~ offsets ~ "abcd".representation ~ "efgh".representation;
+    assert(data.length == 44);
+    MoFile moFile;
+    import std.exception : assertThrown, assertNotThrown;
+    assertNotThrown(moFile = MoFile(data));
+    assert(moFile.gettext("abcd") == "efgh");
 }

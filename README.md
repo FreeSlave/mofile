@@ -51,14 +51,14 @@ Step by step process of generation .mo file from source file (gettext utilities 
     POFILE=examples/ru.po
     MOFILE=examples/ru.mo
     MSGLOCALE=ru_RU.UTF-8 # Target locale
-    xgettext --from-code=UTF-8 --language=C $SOURCE -o examples/messages.pot # Create template file.
-    msginit --locale=$MSGLOCALE -i $TEMPLATE -o $POFILE --no-translator # Generate text translation file
+    xgettext --from-code=UTF-8 --language=C "$SOURCE" -o "$TEMPLATE" # Create template file.
+    msginit --locale=$MSGLOCALE -i "$TEMPLATE" -o "$POFILE" --no-translator # Generate text translation file
     # ... translate messages in editor
-    msgfmt $POFILE -o $MOFILE # Generate binary translation file
+    msgfmt "$POFILE" -o "$MOFILE" # Generate binary translation file
 
 If source file has been changed run these commands to update translation files:
 
-    xgettext -j --from-code=UTF-8 --language=C $SOURCE -o $TEMPLATE # Update template file.
-    msgmerge --update $POFILE $TEMPLATE
+    xgettext -j --from-code=UTF-8 --language=C "$SOURCE" -o "$TEMPLATE" # Update template file.
+    msgmerge --update $POFILE "$TEMPLATE"
     # ... fix translations if needed
-    msgfmt $POFILE -o $MOFILE
+    msgfmt "$POFILE" -o "$MOFILE"
