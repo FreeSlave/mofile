@@ -22,8 +22,8 @@ int main(string[] args)
             return 1;
         } else {
             string msgid_plural = args[3];
-            int n = args[4].to!int;
-            writeln(moFile.ngettext(msgid, msgid_plural, n));
+            const int n = args[4].to!int;
+            writefln("%s %s", n, moFile.ngettext(msgid, msgid_plural, n));
         }
     } else {
         writeln(moFile.gettext(msgid));
