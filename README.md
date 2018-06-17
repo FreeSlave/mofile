@@ -11,7 +11,7 @@ D library for parsing .mo files and getting translated messages. Support for plu
 ```d
 import mofile;
 // Parse .mo file
-MoFile moFile("ru.mo");
+MoFile moFile = MoFile("ru.mo");
 // Find translation
 string s = moFile.gettext("Hello, world");
 // Trying out plural forms

@@ -515,6 +515,23 @@ private enum int moMagic = 0x950412de;
         this(read(fileName).assumeUnique);
     }
 
+    private static string stripRight(string line, string chars) nothrow @safe pure {
+        import std.string : indexOf;
+        for (; line.length > 0; line = line[0 .. $ - 1]) {
+            if (chars.indexOf(line[$ - 1]) == -1)
+                break;
+        }
+        return line;
+    }
+    unittest
+    {
+        assert(stripRight("hello\n\r", "\n\r") == "hello");
+        assert(stripRight("hello\r\n", "\n\r") == "hello");
+        assert(stripRight("hello\r", "\n\r") == "hello");
+        assert(stripRight("hello\n", "\n\r") == "hello");
+        assert(stripRight("hello", "\n\r") == "hello");
+    }
+
     /**
      * Constructor from data.
      * Data must be immutable and live as long as translated messages are used, because it's used to return strings.
@@ -545,15 +562,6 @@ private enum int moMagic = 0x950412de;
         enforce!MoFileException(mapped.isSorted, "Invalid .mo file: message ids are not sorted");
         if (!mapped.empty && mapped.front.length == 0) {
             enforce!MoFileException(mapped.dropOne.all!"!a.empty", "Some msgid besides the reserved one is empty");
-        }
-
-        static string stripRight(string line, string chars) {
-            import std.string : indexOf;
-            for (; line.length > 0; line = line[0 .. $ - 1]) {
-                if (chars.indexOf(line[$ - 1]) == -1)
-                    break;
-            }
-            return line;
         }
 
         string header = getMessage(baseOffsetTr, 0);
