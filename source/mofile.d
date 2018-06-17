@@ -491,7 +491,7 @@ import std.range : iota, assumeSorted, drop, dropOne;
 import std.algorithm.iteration : map, splitter;
 import std.algorithm.searching : all, find, findSkip, skipOver;
 import std.algorithm.sorting : isSorted;
-import std.string : lineSplitter, stripRight;
+import std.string : lineSplitter;
 import std.typecons : tuple;
 
 private enum int moMagic = 0x950412de;
@@ -547,11 +547,20 @@ private enum int moMagic = 0x950412de;
             enforce!MoFileException(mapped.dropOne.all!"!a.empty", "Some msgid besides the reserved one is empty");
         }
 
+        static string stripRight(string line, string chars) {
+            import std.string : indexOf;
+            for (; line.length > 0; line = line[0 .. $ - 1]) {
+                if (chars.indexOf(line[$ - 1]) == -1)
+                    break;
+            }
+            return line;
+        }
+
         string header = getMessage(baseOffsetTr, 0);
         foreach(line; header.lineSplitter) {
             if (line.skipOver("Plural-Forms:")) {
                 if (line.findSkip("plural=")) {
-                    string expr = line.stripRight("\n\r;");
+                    string expr = stripRight(line, "\n\r;");
                     auto parser = new Parser(expr);
                     compiled = parser.compile();
                 }
