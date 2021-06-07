@@ -2,7 +2,7 @@
 
 D library for parsing .mo files and getting translated messages. Support for plural forms is present. Usage is similar to [GNU gettext](https://www.gnu.org/software/gettext/).
 
-[![Build Status](https://travis-ci.org/FreeSlave/mofile.svg?branch=master)](https://travis-ci.org/FreeSlave/mofile?branch=master) [![Coverage Status](https://coveralls.io/repos/FreeSlave/mofile/badge.svg?branch=master&service=github)](https://coveralls.io/github/FreeSlave/mofile?branch=master)
+[![Build Status](https://github.com/FreeSlave/mofile/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/FreeSlave/mofile/actions/workflows/ci.yml) [![Coverage Status](https://coveralls.io/repos/FreeSlave/mofile/badge.svg?branch=master&service=github)](https://coveralls.io/github/FreeSlave/mofile?branch=master)
 
 [Online documentation](https://freeslave.github.io/mofile/mofile.html)
 
