@@ -7,23 +7,14 @@ on:
 
 jobs:
   Build:
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: !contains(github.event.head_commit.message, '[skip ci]')
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        test_type: [unittest]
         dc:
           - ldc-latest
           - dmd-latest
-        exclude:
-          - os: ubuntu-latest
-            dc: dmd-latest
-        include:
-          - os: ubuntu-latest
-            dc: dmd-latest
-            test_type: unittest-cov
-            use_doveralls: true
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -35,13 +26,12 @@ jobs:
         with:
           compiler: ${{ matrix.dc }}
 
-      # Build
-
       - name: Build and run tests
         run: |
-          dub test -b ${{ matrix.test_type }}
+          dub test -b unittest-cov
+
       - name: Install and run doveralls
-        if: ${{ matrix.use_doveralls == true && github.event_name == 'push' }}
+        if: ${{ startsWith(matrix.os, 'ubuntu') && startsWith(matrix.dc, 'dmd') && github.event_name == 'push' }}
         run: |
           sudo apt-get install -y libcurl4-openssl-dev
           dub fetch doveralls
